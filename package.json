@@ -12,7 +12,7 @@
   "author": "Richard Cowin",
   "license": "undefined",
   "dependencies": {
-    "prosemirror": "git+ssh://git@github.com/prosemirror/prosemirror.git",
+    "prosemirror": "0.6.1",
     "markdown-it": "^4.4.0"
   },
   "devDependencies": {
@@ -24,6 +24,6 @@
     "babelify": "^7.2.0",
     "blint": "^0.4.0",
     "json-loader": "^0.5.3"
-    
+
   }
 }

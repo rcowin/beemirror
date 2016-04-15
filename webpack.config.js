@@ -3,10 +3,10 @@ var path = require('path');
 
 module.exports = {
     entry: {
-        demo: path.join(__dirname, 'demo/demo.js')
+        demo: path.join(__dirname, 'src/dist.js')
     },
     output: {
-        filename: 'demo/demo-built.js'
+        filename: 'dist/beemirror.js'
     },
     module: {
         loaders: [
