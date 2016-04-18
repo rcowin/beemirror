@@ -32,12 +32,9 @@ export const MarkdownCommandSpec = {
       mdBar.style.display = 'block';
       textArea.style.display = 'block';
       document.querySelector(".ProseMirror-content").style.display = "none";
-      if (focus !== false) textArea.focus();
-
-      document.body.scrollTop = 0;
+      textArea.focus();
       textArea.scrollTop = 0;
-      //hack
-      // ProseMirror-menu-active
+      document.body.scrollTop = 0;
     } else {
       mdBar.style.display = "none";
       textArea.style.display = 'none';
