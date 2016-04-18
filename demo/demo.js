@@ -1,21 +1,17 @@
-
+//get data
 var te = document.querySelector("#content");
 te.style.display = "none";
 
-var dummy = document.createElement("div");
-dummy.innerHTML = te.value;
-var doc = BeeMirror.fromDOM(dummy);
+var format = "markdown";
+var content = te.value;
 
-window.pm = null;
-
+// load model
 var place = document.querySelector("#editor");
 
-var format = null;
-var content = doc;
 place.textContent = "";
 pm = new BeeMirror({
   place: place,
-  doc: content,
+  doc: te.value,
   docFormat: format,
   // tooltipMenu: true
   autoInput: true,
