@@ -2,14 +2,14 @@
 var te = document.querySelector("#content");
 te.style.display = "none";
 
-var format = "markdown";
 var content = te.value;
+var format = "markdown";
 
 // load model
 var place = document.querySelector("#editor");
-
 place.textContent = "";
-pm = new BeeMirror({
+
+var pm = new BeeMirror({
   place: place,
   doc: te.value,
   docFormat: format,
