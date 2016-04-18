@@ -22,3 +22,8 @@ textarea {
 .marked {
   background: #ff6
 }
+
+.ProseMirror-menubar > .ProseMirror-menuitem:last-of-type {
+  position:absolute;
+  right: 0;
+}
