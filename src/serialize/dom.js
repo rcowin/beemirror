@@ -1,4 +1,4 @@
-import {Youtube} from "../model"
+import {Youtube, Table, TableHead, TableBody, TableRow, TableH, TableD} from "../model"
 
 
 Youtube.prototype.serializeDOM = (node, s) => {
@@ -23,4 +23,24 @@ Youtube.prototype.serializeDOM = (node, s) => {
     setTimeout(function(){content.style.display='none'}, 2000);
   })
   return result
+}
+
+
+Table.prototype.serializeDOM = (node, s) => {
+  return s.renderAs(node, 'table')
+}
+TableHead.prototype.serializeDOM = (node, s) => {
+  return s.renderAs(node, 'thead')
+}
+TableBody.prototype.serializeDOM = (node, s) => {
+  return s.renderAs(node, 'tbody')
+}
+TableRow.prototype.serializeDOM = (node, s) => {
+  return s.renderAs(node, 'tr')
+}
+TableH.prototype.serializeDOM = (node, s) => {
+  return s.renderAs(node, 'th')
+}
+TableD.prototype.serializeDOM = (node, s) => {
+  return s.renderAs(node, 'td')
 }

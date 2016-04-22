@@ -141,6 +141,6 @@ function tokenize_video(md) {
 }
 
 module.exports = function video_plugin(md) {
-    md.renderer.rules.video = tokenize_video(md);
+    // md.renderer.rules.video = tokenize_video(md);
     md.inline.ruler.before('emphasis', 'video', video_embed(md));
 }
