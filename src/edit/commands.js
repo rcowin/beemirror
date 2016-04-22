@@ -1,29 +1,27 @@
 
 import {elt} from "prosemirror/src/dom"
 
-var isMarkDown = false;
-var isFirst = true;
 var mdBar;
-var textArea;
 
 export const MarkdownCommandSpec = {
   derive: true,
   label: "MarkDown",
   run: function(pm){
     var menu;
+    var textArea;
 
-    if (isFirst){
-      isFirst = false;
-
+    if (!pm.beeTextArea){
       var rep = document.querySelector(".ProseMirror");
       // rep.textContent = "";
-      textArea = rep.appendChild(elt("textarea", {style: "font-family: inherit; font-size: inherit; box-sizing: border-box;;padding: 4px 8px 4px 14px;white-space: pre-wrap;line-height: 1.2;"}));
+      pm.beeTextArea = rep.appendChild(elt("textarea", {style: "font-family: inherit; box-sizing: border-box;padding: 4px 8px 4px 14px;white-space: pre-wrap;line-height: 1.2;"}));
     }
 
-    isMarkDown = !isMarkDown;
+    textArea = pm.beeTextArea;
+
+    pm.isBeeMarkDown = !pm.isBeeMarkDown;
     pm.mod.menuBar.updater.force();
 
-    if (isMarkDown){
+    if (pm.isBeeMarkDown){
       menu = document.querySelector(".ProseMirror-menubar");
       mdBar = menu.appendChild(elt("div", {'class': "ProseMirror-menubar-inner", style: "display:none;position: absolute;left:0; right: 50px;top:0;bottom:0;border: 0; background: rgba(250,250,250, .8);"}));
 
@@ -47,7 +45,7 @@ export const MarkdownCommandSpec = {
 
   },
   // select(pm) { return pm.history.redoDepth > 0 },
-  active: function(){ return isMarkDown;},
+  active: function(pm){ return pm.isBeeMarkDown;},
   menu: {
     group: "markdown", rank: 61,
     display: {

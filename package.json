@@ -13,7 +13,8 @@
   "license": "undefined",
   "dependencies": {
     "prosemirror": "0.6.1",
-    "markdown-it": "^4.4.0"
+    "markdown-it": "^4.4.0",
+    "markdown-it-video": "^0.2.1"
   },
   "devDependencies": {
     "babel-cli": "^6.4.0",

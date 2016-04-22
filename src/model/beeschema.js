@@ -4,13 +4,15 @@ import {Doc, BlockQuote, OrderedList, BulletList, ListItem,
         CodeMark, EmMark, StrongMark, LinkMark} from "prosemirror/src/model"
 
 
-export class Youtube extends Block {
+export class Youtube extends Inline {
   get attrs() {
     return {
-      videoId: new Attribute
+      videoId: new Attribute({default:""})
     }
   }
+  get draggable() { return true }
 }
+
 
 
 // :: SchemaSpec
@@ -31,7 +33,7 @@ const beeSpec = new SchemaSpec({
   image: Image,
   hard_break: HardBreak,
 
-  youtube: Youtube
+  video: Youtube
 }, {
   em: EmMark,
   strong: StrongMark,
