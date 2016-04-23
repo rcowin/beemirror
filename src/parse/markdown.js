@@ -22,5 +22,7 @@ Table.register("parseMarkdown", "table", {parse: "block"})
 TableHead.register("parseMarkdown", "thead", {parse: "block"})
 TableBody.register("parseMarkdown", "tbody", {parse: "block"})
 TableRow.register("parseMarkdown", "tr", {parse: "block"})
+
+//th_open token contains attrs: ["style", "text-align:center"]
 TableH.register("parseMarkdown", "th", {parse: "block"})
 TableD.register("parseMarkdown", "td", {parse: "block"})

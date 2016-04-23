@@ -41,6 +41,11 @@ export class TableD extends Block {
   get contains() { return NodeKind.inline }
 }
 
+TableHead.prototype.defaultContent = function(){return ""}
+TableRow.prototype.defaultContent = function(){return ""}
+TableH.prototype.defaultContent = function(){return ""}
+TableD.prototype.defaultContent = function(){return ""}
+
 
 // :: SchemaSpec
 // The specification for the default schema.
