@@ -35,10 +35,20 @@ export class TableRow extends Block {
 export class TableH extends Block {
   get kind() { return NodeKind.table_cell }
   get contains() { return NodeKind.inline }
+  get attrs() {
+    return {
+      style: new Attribute({default:''})
+    }
+  }
 }
 export class TableD extends Block {
   get kind() { return NodeKind.table_cell }
   get contains() { return NodeKind.inline }
+  get attrs() {
+    return {
+      style: new Attribute({default: ''})
+    }
+  }
 }
 
 TableHead.prototype.defaultContent = function(){return ""}

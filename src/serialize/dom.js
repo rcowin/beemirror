@@ -25,7 +25,6 @@ Youtube.prototype.serializeDOM = (node, s) => {
   return result
 }
 
-
 Table.prototype.serializeDOM = (node, s) => {
   return s.renderAs(node, 'table')
 }
@@ -39,8 +38,8 @@ TableRow.prototype.serializeDOM = (node, s) => {
   return s.renderAs(node, 'tr')
 }
 TableH.prototype.serializeDOM = (node, s) => {
-  return s.renderAs(node, 'th')
+  return s.renderAs(node, 'th', node.attrs)
 }
 TableD.prototype.serializeDOM = (node, s) => {
-  return s.renderAs(node, 'td')
+  return s.renderAs(node, 'td', node.attrs)
 }
