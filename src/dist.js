@@ -61,4 +61,8 @@ window.BeeMirror.prototype.getMDContent = function(format){
     return this.getContent(format || "markdown");
 };
 
+
+window.markdownit = require('markdown-it')()
+            .use(require('./parse/markdown-it'))
+
 window.BeeMirror.elt = elt;
