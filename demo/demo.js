@@ -18,4 +18,4 @@ var pm = new BeeMirror({
   tooltipMenu: {selectedBlockMenu: true},
   menuBar: {float: true}
 });
-pm.focus();
+// pm.focus();

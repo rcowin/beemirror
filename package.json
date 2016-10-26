@@ -10,9 +10,28 @@
     "prosemirror", "wagbee"
   ],
   "author": "Richard Cowin",
-  "license": "undefined",
+  "license": "",
   "dependencies": {
-    "prosemirror": "0.6.1",
+    "prosemirror-collab": "^0.11.0",
+    "prosemirror-commands": "^0.11.0",
+
+    "prosemirror-example-setup": "0.11.1",
+    "prosemirror-inputrules": "0.11.1",
+    "prosemirror-history": "^0.11.0",
+    "prosemirror-keymap": "^0.11.0",
+    "prosemirror-markdown": "^0.11.0",
+
+    "prosemirror-menu": "0.11.1",
+    "prosemirror-model": "0.11.1",
+
+    "prosemirror-schema-basic": "0.11.1",
+    "prosemirror-schema-list": "0.11.1",
+    "prosemirror-schema-table": "0.11.1",
+
+    "prosemirror-state": "0.11.1",
+    "prosemirror-transform": "0.11.1",
+    "prosemirror-view": "0.11.1",
+
     "markdown-it": "^4.4.0",
     "markdown-it-video": "^0.2.1"
   },
@@ -24,7 +43,7 @@
     "babel-register": "^6.3.13",
     "babelify": "^7.2.0",
     "blint": "^0.4.0",
-    "json-loader": "^0.5.3"
-
+    "json-loader": "^0.5.3",
+    "webpack-stream": "3.2.0"
   }
 }

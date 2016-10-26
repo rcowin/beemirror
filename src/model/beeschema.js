@@ -1,4 +1,4 @@
-import {SchemaSpec, Schema, Block, Textblock, Inline, Text, Attribute, MarkType, NodeKind} from "prosemirror/src/model/schema"
+// import {SchemaSpec, Schema, Block, Textblock, Inline, Text, Attribute, MarkType, NodeKind} from "prosemirror/src/model/schema"
 import {Doc, BlockQuote, OrderedList, BulletList, ListItem,
         HorizontalRule, Paragraph, Heading, CodeBlock, Image, HardBreak,
         CodeMark, EmMark, StrongMark, LinkMark} from "prosemirror/src/model"

@@ -1,5 +1,5 @@
 
-import {elt} from "prosemirror/src/dom"
+// import {elt} from "prosemirror/src/dom"
 
 var mdBar;
 

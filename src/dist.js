@@ -1,68 +1,46 @@
-import {ProseMirror} from "prosemirror/src/edit/main"
-import {Pos, Node, LinkStyle} from "prosemirror/src/model"
+const {Schema, DOMParser} = require("prosemirror-model")
+const {EditorState} = require("prosemirror-state")
+// const {insertPoint} = require("prosemirror-transform")
+const {schema, defaultMarkdownParser, defaultMarkdownSerializer} = require("prosemirror-markdown")
+const {addListNodes} = require("prosemirror-schema-list")
+const {addTableNodes} = require("./model/beetable")
+const {MenuBarEditorView, MenuItem} = require("prosemirror-menu")
 
-import {fromDOM} from "prosemirror/src/format"
+const {exampleSetup, buildMenuItems} = require("./setup")
+// const {InputRule, inputRules} = require("prosemirror-inputrules")
+// import {MarkdownCommandSpec} from "../src/edit/commands"
 
-import {renderGrouped, inlineGroup, insertMenu, textblockMenu, blockGroup, historyGroup, MenuCommandGroup} from "prosemirror/src/menu/menu"
-
-import {CommandSet} from "prosemirror/src/edit"
-
-
-// import {fromDOM} from "../src/dom"
-// import {defaultSchema as schema} from "../src/model"
-import "prosemirror/src/markdown"
-
-import "../src/parse/dom"
-import "../src/serialize/dom"
-import "../src/parse/markdown"
-import "../src/serialize/markdown"
-
-import {MarkdownCommandSpec} from "../src/edit/commands"
-
-import {beeSchema as schema} from "../src/model"
-
-import "prosemirror/src/inputrules/autoinput"
-import "prosemirror/src/menu/tooltipmenu"
-import "prosemirror/src/menu/menubar"
-import "prosemirror/src/collab"
-
-import "prosemirror/src/menu/tooltipmenu"
-
-import {elt} from "prosemirror/src/dom"
-
-export const markDownGroup = new MenuCommandGroup("markdown")
-
-const defaultMenu = [
-  inlineGroup,
-  insertMenu,
-  [textblockMenu, blockGroup],
-  historyGroup,
-  markDownGroup
-]
-
-const beeCommands = CommandSet.default.update({
-    markdown: MarkdownCommandSpec
-})
+// var menu = buildMenuItems(beeSchema)
 
 window.BeeMirror = function(attrs){
-  attrs.schema = schema;
-  attrs.menuBar.content = defaultMenu;
-  attrs.commands = beeCommands;
-  ProseMirror.apply(this, [attrs]);
-};
-window.BeeMirror.prototype = ProseMirror.prototype;
+  var content = attrs.doc;
 
-window.BeeMirror.fromDOM = function(node){return fromDOM(schema, node);};
+  const beeSchema = new Schema({
+    nodes: addListNodes(addTableNodes(schema.nodeSpec, "block", "block"), "paragraph block*", "block"),
+    marks: schema.markSpec
+  })
 
-window.BeeMirror.prototype.getMDContent = function(format){
-  if (format === "markdown" && this.isBeeMarkDown)
-    return this.beeTextArea.value;
-  else
-    return this.getContent(format || "markdown");
-};
+  let state = EditorState.create({
+    doc: (content ? defaultMarkdownParser.parse(content)
+          : DOMParser.fromSchema(beeSchema).parse(document.querySelector("#content"))
+        ),
+    plugins: [exampleSetup({schema: beeSchema})]
+  })
 
+  // let view = window.view = new MenuBarEditorView(document.querySelector(".full"), {
+  //   state,
+  //   onAction: action => view.updateState(view.editor.state.applyAction(action))
+  // })
 
-window.markdownit = require('markdown-it')()
-            .use(require('./parse/markdown-it'))
+  let view = window.view = new MenuBarEditorView(attrs.place, {
+    state,
+    onAction: action => view.updateState(view.editor.state.applyAction(action))
+  })
 
-window.BeeMirror.elt = elt;
+  // view.editor.focus()
+  // var getContent = function(){
+  //   defaultMarkdownSerializer.serialize(view.editor.state.doc)
+  // };
+}
+
+window.BeeMirror.prototype = {}//ProseMirror.prototype;

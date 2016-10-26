@@ -108,10 +108,12 @@ function video_embed(md) {
 }
 
 function tokenize_youtube(videoID) {
-
-    var embedStart = '<div class="video-holder" data-video-id="sz7ffdbeDKA"><div class="placeHolder"><img class="youtube_video" src="https://i.ytimg.com/vi/'
-    var embedEnd  = '/mqdefault.jpg" frameborder="0" allowfullscreen=""><div class="fa fa-youtube-play youtube-start"></div><div class="fa fa-youtube youtube-icon"></div></div></div>'
-    return embedStart + videoID + embedEnd;
+    var embed = '<div class="video-holder" data-video-id="' +
+                videoID +
+                '"><div class="placeHolder"><img class="youtube_video" src="https://i.ytimg.com/vi/' +
+                videoID +
+                '/mqdefault.jpg" frameborder="0" allowfullscreen=""><div class="fa fa-youtube-play youtube-start"></div><div class="fa fa-youtube youtube-icon"></div></div></div>'
+    return embed;
 }
 
 function tokenize_vimeo(videoID) {
@@ -142,6 +144,6 @@ function tokenize_video(md) {
 }
 
 module.exports = function video_plugin(md) {
-    md.renderer.rules.video = tokenize_video(md);
-    md.inline.ruler.before('emphasis', 'video', video_embed(md));
+  md.renderer.rules.video = tokenize_video(md);
+  md.inline.ruler.before('emphasis', 'video', video_embed(md));
 }
