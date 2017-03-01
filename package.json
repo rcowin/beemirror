@@ -12,27 +12,27 @@
   "author": "Richard Cowin",
   "license": "",
   "dependencies": {
-    "prosemirror-collab": "^0.11.0",
-    "prosemirror-commands": "^0.11.0",
+    "prosemirror-collab": "^0.18.0",
+    "prosemirror-commands": "^0.18.0",
 
-    "prosemirror-example-setup": "0.11.1",
-    "prosemirror-inputrules": "0.11.1",
-    "prosemirror-history": "^0.11.0",
-    "prosemirror-keymap": "^0.11.0",
-    "prosemirror-markdown": "^0.11.0",
+    "prosemirror-example-setup": "^0.18.0",
+    "prosemirror-inputrules": "^0.18.0",
+    "prosemirror-history": "^0.18.0",
+    "prosemirror-keymap": "^0.18.0",
+    "prosemirror-markdown": "^0.18.0",
 
-    "prosemirror-menu": "0.11.1",
-    "prosemirror-model": "0.11.1",
+    "prosemirror-menu": "^0.18.0",
+    "prosemirror-model": "^0.18.0",
 
-    "prosemirror-schema-basic": "0.11.1",
-    "prosemirror-schema-list": "0.11.1",
-    "prosemirror-schema-table": "0.11.1",
+    "prosemirror-schema-basic": "^0.18.0",
+    "prosemirror-schema-list": "^0.18.0",
+    "prosemirror-schema-table": "^0.18.0",
 
-    "prosemirror-state": "0.11.1",
-    "prosemirror-transform": "0.11.1",
-    "prosemirror-view": "0.11.1",
+    "prosemirror-state": "^0.18.0",
+    "prosemirror-transform": "^0.18.0",
+    "prosemirror-view": "^0.18.0",
 
-    "markdown-it": "^4.4.0",
+    "markdown-it": "^6.0.4",
     "markdown-it-video": "^0.2.1"
   },
   "devDependencies": {
@@ -40,6 +40,7 @@
     "babel-core": "^6.3.26",
     "babel-loader": "^6.2.1",
     "babel-preset-es2015": "^6.3.13",
+    "babel-preset-stage-0": "6.5.0",
     "babel-register": "^6.3.13",
     "babelify": "^7.2.0",
     "blint": "^0.4.0",

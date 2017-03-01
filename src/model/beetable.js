@@ -34,7 +34,6 @@ const tableHead = {
 }
 exports.table = table
 
-
 // :: NodeSpec
 // A table node spec. Has one attribute, **`columns`**, which holds
 // a number indicating the amount of columns in the table.
@@ -67,7 +66,9 @@ exports.tableRow = tableRow
 // A table cell node spec.
 const tableCell = {
   parseDOM: [{tag: "td"}],
-  toDOM() { return ["td", 0] }
+  toDOM() { 
+    return ["td", 0] 
+  }
 }
 exports.tableCell = tableCell
 
@@ -89,8 +90,9 @@ function addTableNodes(nodes, cellContent, tableGroup) {
     table: add(table, {content: "table_head? table_body", group: tableGroup}),
     table_head: add(tableHead, {content: "table_row[columns=.columns]?"}),
     table_body: add(tableBody, {content: "table_row[columns=.columns]+"}),
-    table_row: add(tableRow, {content: "table_cell{.columns}"}),
-    table_cell: add(tableCell, {content: cellContent})
+    // table_row: add(tableRow, {content: "table_cell{.columns}"}),
+    table_row: add(tableRow, {content: "table_cell+"}),
+    table_cell: add(tableCell, {content: cellContent})//, group: "block", code: true, attrs: {params: {default: ""}}})
   })
 }
 exports.addTableNodes = addTableNodes

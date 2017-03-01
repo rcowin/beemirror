@@ -2,6 +2,7 @@ const {wrapItem, blockTypeItem, Dropdown, DropdownSubmenu, joinUpItem, liftItem,
        selectParentNodeItem, undoItem, redoItem, icons, MenuItem} = require("prosemirror-menu")
 const {createTable, addColumnBefore, addColumnAfter,
        removeColumn, addRowBefore, addRowAfter, removeRow} = require("../model/beetable.js")
+const {Selection} = require("prosemirror-state")
 const {toggleMark} = require("prosemirror-commands")
 const {wrapInList} = require("prosemirror-schema-list")
 const {TextField, openPrompt} = require("./prompt")
@@ -32,11 +33,9 @@ function insertImageItem(nodeType) {
           alt: new TextField({label: "Description",
                               value: attrs ? attrs.title : state.doc.textBetween(from, to, " ")})
         },
-        // FIXME this (and similar uses) won't have the current state
-        // when it runs, leading to problems in, for example, a
-        // collaborative setup
         callback(attrs) {
-          view.props.onAction(view.state.tr.replaceSelection(nodeType.createAndFill(attrs)).action())
+          view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill(attrs)))
+          view.focus()
         }
       })
     }
@@ -47,7 +46,7 @@ function positiveInteger(value) {
   if (!/^[1-9]\d*$/.test(value)) return "Should be a positive integer"
 }
 
-function insertTableItem(tableType, tableHeadType, tableBodyType) {
+function insertTableItem(tableType) {
   return new MenuItem({
     title: "Insert a table",
     run(_, _a, view) {
@@ -58,7 +57,10 @@ function insertTableItem(tableType, tableHeadType, tableBodyType) {
           cols: new TextField({label: "Columns", validate: positiveInteger})
         },
         callback({rows, cols}) {
-          view.props.onAction(view.state.tr.replaceSelection(createTable(tableType, tableHeadType, tableBodyType, +rows, +cols)).scrollAction())
+          let tr = view.state.tr.replaceSelectionWith(createTable(tableType, +rows, +cols))
+          tr.setSelection(Selection.near(tr.doc.resolve(view.state.selection.from)))
+          view.dispatch(tr.scrollIntoView())
+          view.focus()
         }
       })
     },
@@ -85,8 +87,8 @@ function cmdItem(cmd, options) {
 }
 
 function markActive(state, type) {
-  let {from, to, empty} = state.selection
-  if (empty) return type.isInSet(state.storedMarks || state.doc.marksAt(from))
+  let {from, $from, to, empty} = state.selection
+  if (empty) return type.isInSet(state.storedMarks || $from.marks())
   else return state.doc.rangeHasMark(from, to, type)
 }
 
@@ -102,9 +104,9 @@ function linkItem(markType) {
   return markItem(markType, {
     title: "Add or remove link",
     icon: icons.link,
-    run(state, onAction, view) {
+    run(state, dispatch, view) {
       if (markActive(state, markType)) {
-        toggleMark(markType)(state, onAction)
+        toggleMark(markType)(state, dispatch)
         return true
       }
       openPrompt({
@@ -122,7 +124,8 @@ function linkItem(markType) {
           title: new TextField({label: "Title"})
         },
         callback(attrs) {
-          toggleMark(markType, attrs)(view.state, view.props.onAction)
+          toggleMark(markType, attrs)(view.state, view.dispatch)
+          view.focus()
         }
       })
     }
@@ -248,11 +251,11 @@ function buildMenuItems(schema) {
       title: "Insert horizontal rule",
       label: "Horizontal rule",
       select(state) { return canInsert(state, hr) },
-      run(state, onAction) { onAction(state.tr.replaceSelection(hr.create()).action()) }
+      run(state, dispatch) { dispatch(state.tr.replaceSelectionWith(hr.create())) }
     })
   }
   if (type = schema.nodes.table)
-    r.insertTable = insertTableItem(type, schema.nodes.table_head, schema.nodes.table_body)
+    r.insertTable = insertTableItem(type)
   if (type = schema.nodes.table_row) {
     r.addRowBefore = cmdItem(addRowBefore, {title: "Add row before"})
     r.addRowAfter = cmdItem(addRowAfter, {title: "Add row after"})
