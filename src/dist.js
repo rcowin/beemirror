@@ -33,6 +33,7 @@ window.BeeMirror = function(attrs){
     plugins: exampleSetup({schema: beeSchema})
   })
 
+
   // let view = window.view = new MenuBarEditorView(document.querySelector(".full"), {
   //   state,
   //   onAction: action => view.updateState(view.editor.state.applyAction(action))
@@ -40,7 +41,7 @@ window.BeeMirror = function(attrs){
 
   let view = window.view = new MenuBarEditorView(attrs.place, {
     state,
-    onAction: action => view.updateState(view.editor.state.applyAction(action))
+    // onAction: action => view.updateState(view.editor.state.applyAction(action))
   })
 
   // view.editor.focus()
