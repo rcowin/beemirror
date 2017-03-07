@@ -10,7 +10,7 @@ Youtube.register("configureMarkdown", "video", parser => {
 Youtube.register("parseMarkdown", "video", {
   parse: function (state, tok) {
     if (tok.service === "youtube"){
-      state.addNode(this, { videoId: tok.videoID});
+      state.addNode(this, { videoID: tok.videoID});
     } else {
       return false;
     }

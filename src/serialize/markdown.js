@@ -2,7 +2,7 @@ import {Youtube, Table, TableHead, TableBody, TableRow, TableH, TableD} from "..
 
 //![:youtube](AysWsbrtzMU)
 Youtube.prototype.serializeMarkdown = (state, node) => {
-  state.write("@[youtube]" + "(" + state.esc(node.attrs.videoId) + ")")
+  state.write("@[youtube]" + "(" + state.esc(node.attrs.videoID) + ")")
 }
 
 function renderBlankCells(state, node){
