@@ -6,9 +6,13 @@ const {beeTokens} = require("./markdown/index.js")
 
 const {addListNodes} = require("prosemirror-schema-list")
 const {addTableNodes} = require("./model/beetable")
+const {addVideoNodes} = require("./model/video")
+
 const {MenuBarEditorView, MenuItem} = require("prosemirror-menu")
 
 const markdownit = require("markdown-it")
+// const videoMarkdown = require("./parse/markdown-it");
+const videoMarkdown = require("markdown-it-video");
 
 const {exampleSetup, buildMenuItems} = require("./setup")
 // const {InputRule, inputRules} = require("prosemirror-inputrules")
@@ -17,14 +21,20 @@ const {exampleSetup, buildMenuItems} = require("./setup")
 // var menu = buildMenuItems(beeSchema)
 
 window.BeeMirror = function(attrs){
-  var content = attrs.doc;
+  let content = attrs.doc;
+
+  let nodes = schema.nodeSpec;
+  
+  nodes = addTableNodes(nodes, "text*", "block");
+  nodes = addListNodes(nodes, "paragraph block*", "block");
+  nodes = addVideoNodes(nodes);
 
   const beeSchema = new Schema({
-    nodes: addListNodes(addTableNodes(schema.nodeSpec, "text*", "block"), "paragraph block*", "block"),
+    nodes: nodes,
     marks: schema.markSpec
   })
 
-  let beeMarkdownParser = new MarkdownParser(beeSchema,  markdownit('default', {html: false}), beeTokens);
+  let beeMarkdownParser = new MarkdownParser(beeSchema,  markdownit('default', {html: false}, beeTokens).use(videoMarkdown), beeTokens);
 
   let state = EditorState.create({
     doc: (content ? beeMarkdownParser.parse(content)
