@@ -16,7 +16,7 @@ const videoMarkdown = require("markdown-it-video");
 
 const {exampleSetup, buildMenuItems} = require("./setup")
 // const {InputRule, inputRules} = require("prosemirror-inputrules")
-// import {MarkdownCommandSpec} from "../src/edit/commands"
+import {MarkdownCommandSpec} from "../src/edit/commands"
 
 // var menu = buildMenuItems(beeSchema)
 
@@ -44,6 +44,24 @@ window.BeeMirror = function(attrs){
   })
 
 
+
+let menu = buildMenuItems(beeSchema)
+menu.markdown = new MenuItem(MarkdownCommandSpec);
+// menu.inlineMenu = menu.inlineMenu.concat(menu.markdown)
+menu.fullMenu = menu.fullMenu.concat([[menu.markdown]])
+
+// ({
+//     markdown: MarkdownCommandSpec
+// })
+// menu.insertMenu.content = dinos.map(name => new MenuItem({
+//   title: "Insert " + name,
+//   label: name.charAt(0).toUpperCase() + name.slice(1),
+//   select(state) {
+//     return insertPoint(state.doc, state.selection.from, dinoType) != null
+//   },
+//   run(state, dispatch) { dispatch(state.tr.replaceSelectionWith(dinoType.create({type: name}))) }
+// })).concat(menu.insertMenu.content)
+
   // let view = window.view = new MenuBarEditorView(document.querySelector(".full"), {
   //   state,
   //   onAction: action => view.updateState(view.editor.state.applyAction(action))
@@ -51,6 +69,8 @@ window.BeeMirror = function(attrs){
 
   let view = window.view = new MenuBarEditorView(attrs.place, {
     state,
+    menuContent: menu.fullMenu
+
     // onAction: action => view.updateState(view.editor.state.applyAction(action))
   })
 
