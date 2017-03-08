@@ -1,7 +1,7 @@
 const {Schema, DOMParser} = require("prosemirror-model")
 const {EditorState} = require("prosemirror-state")
 // const {insertPoint} = require("prosemirror-transform")
-const {schema, MarkdownParser, defaultMarkdownSerializer} = require("./prosemirror-markdown")
+const {schema, MarkdownParser, defaultMarkdownSerializer, MarkdownSerializer} = require("./prosemirror-markdown")
 const {beeTokens} = require("./markdown/index.js")
 
 const {addListNodes} = require("prosemirror-schema-list")
@@ -16,7 +16,9 @@ const videoMarkdown = require("markdown-it-video");
 
 const {exampleSetup, buildMenuItems} = require("./setup")
 // const {InputRule, inputRules} = require("prosemirror-inputrules")
-import {MarkdownCommandSpec} from "../src/edit/commands"
+import {buildMarkdownCommandSpec} from "../src/edit/commands"
+
+import { beeSerializerNodes } from "./markdown/serialize.js"
 
 // var menu = buildMenuItems(beeSchema)
 
@@ -24,7 +26,7 @@ window.BeeMirror = function(attrs){
   let content = attrs.doc;
 
   let nodes = schema.nodeSpec;
-  
+   
   nodes = addTableNodes(nodes, "text*", "block");
   nodes = addListNodes(nodes, "paragraph block*", "block");
   nodes = addVideoNodes(nodes);
@@ -36,6 +38,14 @@ window.BeeMirror = function(attrs){
 
   let beeMarkdownParser = new MarkdownParser(beeSchema,  markdownit('default', {html: false}, beeTokens).use(videoMarkdown), beeTokens);
 
+  // view.editor.focus()
+  // var getContent = function(){
+  //   defaultMarkdownSerializer.serialize(view.editor.state.doc)
+  // };
+  let beeMdNodes = {...defaultMarkdownSerializer.nodes, ...beeSerializerNodes};
+  let beeMdMarks = defaultMarkdownSerializer.marks;
+  let beeMarkdownSerializer = new MarkdownSerializer(beeMdNodes, beeMdMarks);
+  
   let state = EditorState.create({
     doc: (content ? beeMarkdownParser.parse(content)
           : DOMParser.fromSchema(beeSchema).parse(document.querySelector("#content"))
@@ -44,10 +54,10 @@ window.BeeMirror = function(attrs){
   })
 
 
+let markdownCommandSpec = buildMarkdownCommandSpec(beeMarkdownParser, beeMarkdownSerializer);
 
 let menu = buildMenuItems(beeSchema)
-menu.markdown = new MenuItem(MarkdownCommandSpec);
-// menu.inlineMenu = menu.inlineMenu.concat(menu.markdown)
+menu.markdown = new MenuItem(markdownCommandSpec);
 menu.fullMenu = menu.fullMenu.concat([[menu.markdown]])
 
 // ({
@@ -74,10 +84,7 @@ menu.fullMenu = menu.fullMenu.concat([[menu.markdown]])
     // onAction: action => view.updateState(view.editor.state.applyAction(action))
   })
 
-  // view.editor.focus()
-  // var getContent = function(){
-  //   defaultMarkdownSerializer.serialize(view.editor.state.doc)
-  // };
+
 }
 
 window.BeeMirror.prototype = {}//ProseMirror.prototype;
