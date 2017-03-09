@@ -65,9 +65,10 @@ exports.tableRow = tableRow
 // :: NodeSpec
 // A table cell node spec.
 const tableCell = {
+  attrs: {style: {default: ''}},
   parseDOM: [{tag: "td"}],
-  toDOM() { 
-    return ["td", 0] 
+  toDOM(node) { 
+    return ["td", node.attrs, 0] 
   }
 }
 exports.tableCell = tableCell

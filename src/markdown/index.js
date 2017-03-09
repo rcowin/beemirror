@@ -36,9 +36,12 @@ const beeTokens = {
   th: {block: "table_cell", attrs: (tok) => {
     columnsCount += 1;
     for (var i=0; i< columnsState.length; i++) columnsState[i].columns = columnsCount;
+        
+    if (tok.attrs && tok.attrs[0].length > 1) return {style: tok.attrs[0][1]};
     return {};
   }},
   td: {block: "table_cell", attrs: (tok) => {
+    if (tok.attrs && tok.attrs[0].length > 1) return {style: tok.attrs[0][1]};
     return {};
   }},
 
