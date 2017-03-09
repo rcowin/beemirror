@@ -87,11 +87,11 @@ function add(obj, props) {
 // occur inside cells.
 function addTableNodes(nodes, cellContent, tableGroup) {
   return nodes.append({
-    table: add(table, {content: "table_head? table_body", group: tableGroup}),
+    table: add(table, {content: "table_head? table_body[columns=.columns]", group: tableGroup}),
     table_head: add(tableHead, {content: "table_row[columns=.columns]?"}),
     table_body: add(tableBody, {content: "table_row[columns=.columns]+"}),
     //table_row: add(tableRow, {content: "table_cell{.columns}"}),
-    table_row: add(tableRow, {content: "table_cell+"}),
+     table_row: add(tableRow, {content: "table_cell+"}),
     table_cell: add(tableCell, {content: cellContent})//, group: "block", code: true, attrs: {params: {default: ""}}})
   })
 }
@@ -99,8 +99,10 @@ exports.addTableNodes = addTableNodes
 
 // :: (NodeType, number, number, ?Object) → Node
 // Create a table node with the given number of rows and columns.
-function createTable(nodeType, headType, bodyType, rows, columns, attrs) {
+function createTable(nodeType, rows, columns, attrs) {
   attrs = setColumns(attrs, columns)
+  let headType = nodeType.contentExpr.elements[0].nodeTypes[0]
+  let bodyType = nodeType.contentExpr.elements[1].nodeTypes[0]
   let rowType = bodyType.contentExpr.elements[0].nodeTypes[0]
   let cellType = rowType.contentExpr.elements[0].nodeTypes[0]
   let cell = cellType.createAndFill(), cells = []
@@ -108,7 +110,7 @@ function createTable(nodeType, headType, bodyType, rows, columns, attrs) {
   let row = rowType.create({columns}, Fragment.from(cells)), rowNodes = []
   for (let i = 0; i < rows; i++) rowNodes.push(row)
   let body = bodyType.create(attrs, Fragment.from(rowNodes))
-  let head = headType.create(attrs, Fragment.from([]))
+  let head = headType.create(attrs, Fragment.from([row]))
   return nodeType.create(attrs, Fragment.from([head,body]))
 }
 exports.createTable = createTable
