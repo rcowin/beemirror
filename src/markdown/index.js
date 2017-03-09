@@ -1,6 +1,9 @@
 // const markdownit = require("markdown-it")
 // const {Mark} = require("prosemirror-model")
 
+let columnsState = [];
+let columnsCount = 0;
+
 const beeTokens = {
   blockquote: {block: "blockquote"},
   paragraph: {block: "paragraph"},
@@ -10,20 +13,34 @@ const beeTokens = {
   heading: {block: "heading", attrs: tok => ({level: +tok.tag.slice(1)})},
   code_block: {block: "code_block"},
 
-  table: {block: "table", attrs: (tok) => (
-    {collumns: tok.children ? tok.children[0].collumns : 3}
-  )},
-  thead: {block: "table_head", attrs: (tok) => (
-    {collumns: tok.children ? tok.children[0].collumns : 3}
-  )},
-  tbody: {block: "table_body", attrs: (tok) => (
-    {collumns: tok.children ? tok.children[0].collumns : 3}
-  )},
-  tr: {block: "table_row",  attrs: (tok) => (
-    { tableCellStyle: [], collumns: tok.children ? tok.children.length : 3}
-  )},
-  th: {block: "table_cell"},
-  td: {block: "table_cell"},
+  table: {block: "table", attrs: (tok) => {
+    let value =  {columns: 0};
+    columnsState = [value];
+    columnsCount = 0;
+    return value;
+  }},
+  thead: {block: "table_head", attrs: (tok) => {
+    let value =  {columns: 0};
+    columnsState.push(value);
+    return value;
+  }},
+  tbody: {block: "table_body", attrs: (tok) => {
+    let value =  {columns: columnsCount};
+    return value;
+  }},
+  tr: {block: "table_row",  attrs: (tok) => {
+    let value = { tableCellStyle: [], columns: columnsCount };
+    if (columnsCount === 0) columnsState.push(value);
+    return value;
+  }},
+  th: {block: "table_cell", attrs: (tok) => {
+    columnsCount += 1;
+    for (var i=0; i< columnsState.length; i++) columnsState[i].columns = columnsCount;
+    return {};
+  }},
+  td: {block: "table_cell", attrs: (tok) => {
+    return {};
+  }},
 
   video: {node: 'video', attrs: (tok) => ({
     videoID: tok.videoID,

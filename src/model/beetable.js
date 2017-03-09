@@ -90,8 +90,8 @@ function addTableNodes(nodes, cellContent, tableGroup) {
     table: add(table, {content: "table_head? table_body[columns=.columns]", group: tableGroup}),
     table_head: add(tableHead, {content: "table_row[columns=.columns]?"}),
     table_body: add(tableBody, {content: "table_row[columns=.columns]+"}),
-    //table_row: add(tableRow, {content: "table_cell{.columns}"}),
-     table_row: add(tableRow, {content: "table_cell+"}),
+    table_row: add(tableRow, {content: "table_cell{.columns}"}),
+    //table_row: add(tableRow, {content: "table_cell+"}),
     table_cell: add(tableCell, {content: cellContent})//, group: "block", code: true, attrs: {params: {default: ""}}})
   })
 }
