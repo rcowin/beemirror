@@ -36,12 +36,10 @@ window.BeeMirror = function(attrs){
     marks: schema.markSpec
   })
 
-  let beeMarkdownParser = new MarkdownParser(beeSchema,  markdownit('default', {html: false}, beeTokens).use(videoMarkdown), beeTokens);
+  let markdown = markdownit('default', {html: false}, beeTokens).use(videoMarkdown);
+  let beeMarkdownParser = new MarkdownParser(beeSchema,  markdown, beeTokens);
 
-  // view.editor.focus()
-  // var getContent = function(){
-  //   defaultMarkdownSerializer.serialize(view.editor.state.doc)
-  // };
+  
   let beeMdNodes = {...defaultMarkdownSerializer.nodes, ...beeSerializerNodes};
   let beeMdMarks = defaultMarkdownSerializer.marks;
   let beeMarkdownSerializer = new MarkdownSerializer(beeMdNodes, beeMdMarks);
@@ -60,22 +58,6 @@ let menu = buildMenuItems(beeSchema)
 menu.markdown = new MenuItem(markdownCommandSpec);
 menu.fullMenu = menu.fullMenu.concat([[menu.markdown]])
 
-// ({
-//     markdown: MarkdownCommandSpec
-// })
-// menu.insertMenu.content = dinos.map(name => new MenuItem({
-//   title: "Insert " + name,
-//   label: name.charAt(0).toUpperCase() + name.slice(1),
-//   select(state) {
-//     return insertPoint(state.doc, state.selection.from, dinoType) != null
-//   },
-//   run(state, dispatch) { dispatch(state.tr.replaceSelectionWith(dinoType.create({type: name}))) }
-// })).concat(menu.insertMenu.content)
-
-  // let view = window.view = new MenuBarEditorView(document.querySelector(".full"), {
-  //   state,
-  //   onAction: action => view.updateState(view.editor.state.applyAction(action))
-  // })
 
   let view = window.view = new MenuBarEditorView(attrs.place, {
     state,
@@ -87,4 +69,8 @@ menu.fullMenu = menu.fullMenu.concat([[menu.markdown]])
 
 }
 
-window.BeeMirror.prototype = {}//ProseMirror.prototype;
+//window.markdownit = markdown;
+window.markdownit = markdownit('default', {}, beeTokens).use(videoMarkdown)
+
+window.BeeMirror.prototype.focus = function(){};
+// window.BeeMirror.prototype = {}//ProseMirror.prototype;

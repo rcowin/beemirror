@@ -40,7 +40,7 @@ export const buildMarkdownCommandSpec = function (parser, serializer) {
       var menu;
 
       if (!textArea) {
-        var rep = document.querySelector("#editor");
+        var rep = document.querySelector(".ProseMirror-menubar-wrapper");
         // rep.textContent = "";
         textArea = document.createElement("textarea");
         textArea.style = "font-family: inherit; box-sizing: border-box;padding: 4px 8px 4px 14px;white-space: pre-wrap;line-height: 1.2;"
