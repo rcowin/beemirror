@@ -45,19 +45,17 @@ export const buildMarkdownCommandSpec = function (parser, serializer) {
         textArea = document.createElement("textarea");
         textArea.style = "font-family: inherit; box-sizing: border-box;padding: 4px 8px 4px 14px;white-space: pre-wrap;line-height: 1.2;"
         pm.beeTextArea = rep.appendChild(textArea);
-        // pm.beeTextArea = rep.appendChild(elt("textarea", {style: "font-family: inherit; box-sizing: border-box;padding: 4px 8px 4px 14px;white-space: pre-wrap;line-height: 1.2;"}));
       }
 
       pm.isBeeMarkDown = !pm.isBeeMarkDown;
       // this.updateMenu();
       // pm.mod.menuBar.updater.force();
 
-
       if (pm.isBeeMarkDown) {
         menu = document.querySelector(".ProseMirror-menubar");
         mdBar = document.createElement("div");
         mdBar.class = "ProseMirror-menubar-inner ";
-        mdBar.style = "font-family: inherit; box-sizing: border-box;padding: 4px 8px 4px 14px;white-space: pre-wrap;line-height: 1.2;"
+        mdBar.style = "position:absolute;white-space:pre-wrap;top:0px;bottom:0px;left:0px;right:36px;background-color:rgba(255,255,255,0.8);"
         mdBar = menu.appendChild(mdBar);
 
         // mdBar = menu.appendChild(elt("div", {'class': "ProseMirror-menubar-inner", style: "display:none;position: absolute;left:0; right: 50px;top:0;bottom:0;border: 0; background: rgba(250,250,250, .8);"}));
@@ -77,25 +75,17 @@ export const buildMarkdownCommandSpec = function (parser, serializer) {
 
         state.doc = parser.parse(textArea.value)
         view.updateState(view.state)
-        // pm.setContent(textArea.value, "markdown");
         // pm.focus();
       }
       // pm.ensureOperation();
-
     },
     // select(pm) { return pm.history.redoDepth > 0 },
     active: function (pm) { return pm.isBeeMarkDown; },
     group: "markdown",
-    // rank: 61,
-
     icon: {
-      // display: {
-      // type: "icon",
       width: 208,
       height: 128,
-      // width: 585, height: 1024,
       path: "M30 98v-68h20l20 25 20-25h20v68h-20v-39l-20 25-20-25v39zM155 98l-30-33h20v-35h20v35h20z"
-      // }
     }
   };
 }
