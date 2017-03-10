@@ -1,8 +1,8 @@
-const {Schema, DOMParser} = require("prosemirror-model")
-const {EditorState} = require("prosemirror-state")
-// const {insertPoint} = require("prosemirror-transform")
-const {schema, MarkdownParser, defaultMarkdownSerializer, MarkdownSerializer} = require("./prosemirror-markdown")
-const {beeTokens} = require("./markdown/index.js")
+import {Schema, DOMParser} from 'prosemirror-model'
+import {EditorState} from 'prosemirror-state'
+import {schema, MarkdownParser, MarkdownSerializer, 
+        defaultMarkdownSerializer} from './prosemirror-markdown'
+const {beeTokens} = require("./markdown")
 
 const {addListNodes} = require("prosemirror-schema-list")
 const {addTableNodes} = require("./model/beetable")
@@ -11,16 +11,13 @@ const {addVideoNodes} = require("./model/video")
 const {MenuBarEditorView, MenuItem} = require("prosemirror-menu")
 
 const markdownit = require("markdown-it")
-// const videoMarkdown = require("./parse/markdown-it");
-const videoMarkdown = require("markdown-it-video");
+const videoMarkdown = require("./markdown-it/video");
 
 const {exampleSetup, buildMenuItems} = require("./setup")
-// const {InputRule, inputRules} = require("prosemirror-inputrules")
-import {buildMarkdownCommandSpec} from "../src/edit/commands"
+import {buildMarkdownCommandSpec} from "./edit/commands"
 
 import { beeSerializerNodes } from "./markdown/serialize.js"
 
-// var menu = buildMenuItems(beeSchema)
 
 window.BeeMirror = function(attrs){
   let content = attrs.doc;
@@ -73,4 +70,7 @@ menu.fullMenu = menu.fullMenu.concat([[menu.markdown]])
 window.markdownit = markdownit('default', {}, beeTokens).use(videoMarkdown)
 
 window.BeeMirror.prototype.focus = function(){};
+window.BeeMirror.prototype.getMDContent = function(){
+  return beeMarkdownSerializer.serialize()
+}
 // window.BeeMirror.prototype = {}//ProseMirror.prototype;
