@@ -82,8 +82,7 @@ export const beeSerializerNodes = {
   },
   table_cell(state, node) {
     const text = node.content.content[0];
-    if (text)
-    state.render(text);
+    if (text)  state.renderInline(node);
   },
 }
 
