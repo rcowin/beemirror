@@ -1,10 +1,5 @@
 import {Youtube, Table, TableHead, TableBody, TableRow, TableH, TableD} from "../model"
 
-//![:youtube](AysWsbrtzMU)
-Youtube.prototype.serializeMarkdown = (state, node) => {
-  state.write("@[youtube]" + "(" + state.esc(node.attrs.videoID) + ")")
-}
-
 function renderBlankCells(state, node){
   var tr = node.child(0);
   state.write("|")
@@ -13,6 +8,7 @@ function renderBlankCells(state, node){
     state.write(" |")
   }
 }
+
 
 function renderCells(state, node) {
   if (state.closed && state.closed.type == node.type)
@@ -56,37 +52,37 @@ function renderHeadDelim(state, node){
   }
 }
 
-Table.prototype.serializeMarkdown = (state, node) => {
-  if (node.childCount > 1){
-    state.render(node.child(0));
-    state.render(node.child(1));
-  } else {
-    renderBlankCells(state, node.child(0))
-    renderHeadDelim(state, node.child(0))
+export const beeSerializerNodes = {
+  video(state, node){
+    state.write("@[youtube]" + "(" + state.esc(node.attrs.videoID) + ")")
+  },
+  table(state, node) {
+    if (node.childCount > 1){
+      state.render(node.child(0));
+      state.render(node.child(1));
+    } else {
+      renderBlankCells(state, node.child(0))
+      renderHeadDelim(state, node.child(0))
 
-    state.render(node.child(0));
-  }
+      state.render(node.child(0));
+    }
 
-  state.write("\n")
-  state.write("\n")
+    state.write("\n")
+    state.write("\n")
+  },
+  table_head(state, node) {
+    renderRows(state, node)
+    renderHeadDelim(state, node)
+  },
+  table_body(state, node) {
+    renderRows(state, node)
+  },
+  table_row(state, node) {
+    renderCells(state, node)
+  },
+  table_cell(state, node) {
+    const text = node.content.content[0];
+    if (text)  state.renderInline(node);
+  },
 }
 
-TableHead.prototype.serializeMarkdown = (state, node) => {
-  renderRows(state, node)
-  renderHeadDelim(state, node)
-}
-
-TableBody.prototype.serializeMarkdown = (state, node) => {
-  renderRows(state, node)
-}
-
-TableRow.prototype.serializeMarkdown = (state, node) => {
-  renderCells(state, node)
-}
-
-TableH.prototype.serializeMarkdown = (state, node) => {
-  state.render(node.child(0));
-}
-TableD.prototype.serializeMarkdown = (state, node) => {
-  state.render(node.child(0));
-}

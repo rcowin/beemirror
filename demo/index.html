@@ -14,16 +14,21 @@
 <div style="display: none" id="markdown_content">
 </div>
 
+<div class="full"></div>
+
+
 <div id="editor">
 </div>
 
 <textarea style="display:none" id="content" spellcheck="false">
 
-* ** this **
-* that
+### Video support
 
+@[youtube](sz7ffdbeDKA)
 
-|     first    |      center      |  right |
+### Table support
+
+| first | center | right |
 | --- |:---:| ---:|
 | col 3 is      | right-aligned | $1600 |
 | col 2 is      | centered      |   $12 |
@@ -42,13 +47,25 @@ First Header | Second Header
 Content from cell 1 | Content from cell 2
 Content in the first column | Content in the second column
 
+
+
+    function x(){
+      return 3
+    }
+
+
 ## Demonstration Text
 
 In a ProseMirror document, you can have the usual **strong** and *emphasized* text, `code font`, and [links](http://marijnhaverbeke.nl). There are also images: ![demo picture](img.png).
 
-## Video support
+* a
+* b
 
-@[youtube](sz7ffdbeDKA)
+
+* **this**
+* that
+
+
 
 
 ![](https://i.ytimg.com/vi/HITjjXdbsd4/mqdefault.jpg)
@@ -103,6 +120,7 @@ This paragraph has\
 a hard break inside of it.
 
 </textarea>
+
 
 <script src="../dist/beemirror.js"></script>
 
