@@ -26,17 +26,17 @@
 // }
 // exports.blockTypeItem = blockTypeItem;
 
-let mdBar;
-let textArea;
-
 export const buildMarkdownCommandSpec = function (parser, serializer) {
+  let mdBar;
+  let textArea;
+  let isBeeMarkDown;
+
   return {
     // derive: true,
     label: "MarkDown",
     title: "MarkDown",
 
     run: function (state, dispatch, view) {
-      const pm = state;
       var menu;
 
       if (!textArea) {
@@ -44,18 +44,18 @@ export const buildMarkdownCommandSpec = function (parser, serializer) {
         // rep.textContent = "";
         textArea = document.createElement("textarea");
         textArea.style = "font-family: inherit; box-sizing: border-box;padding: 4px 8px 4px 14px;white-space: pre-wrap;line-height: 1.2;"
-        pm.beeTextArea = rep.appendChild(textArea);
+        rep.appendChild(textArea);
       }
 
-      pm.isBeeMarkDown = !pm.isBeeMarkDown;
+      isBeeMarkDown = !isBeeMarkDown;
       // this.updateMenu();
       // pm.mod.menuBar.updater.force();
 
-      if (pm.isBeeMarkDown) {
+      if (isBeeMarkDown) {
         menu = document.querySelector(".ProseMirror-menubar");
         mdBar = document.createElement("div");
         mdBar.class = "ProseMirror-menubar-inner ";
-        mdBar.style = "position:absolute;white-space:pre-wrap;top:0px;bottom:0px;left:0px;right:36px;background-color:rgba(255,255,255,0.8);"
+        mdBar.style = "position:absolute;white-space:pre-wrap;top:0px;bottom:0px;left:0px;right:44px;background-color:rgba(255,255,255,0.8);"
         mdBar = menu.appendChild(mdBar);
 
         // mdBar = menu.appendChild(elt("div", {'class': "ProseMirror-menubar-inner", style: "display:none;position: absolute;left:0; right: 50px;top:0;bottom:0;border: 0; background: rgba(250,250,250, .8);"}));
@@ -86,6 +86,14 @@ export const buildMarkdownCommandSpec = function (parser, serializer) {
       width: 208,
       height: 128,
       path: "M30 98v-68h20l20 25 20-25h20v68h-20v-39l-20 25-20-25v39zM155 98l-30-33h20v-35h20v35h20z"
+    },
+
+    getMDContent: function(){
+      if (isBeeMarkDown)
+        return textArea.value;
+      else
+        return serializer.serialize(view.editor.state.doc);
     }
   };
 }
+

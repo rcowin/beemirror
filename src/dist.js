@@ -41,7 +41,7 @@ window.BeeMirror = function (attrs) {
   let beeMarkdownSerializer = new MarkdownSerializer(beeMdNodes, beeMdMarks);
 
   let state = EditorState.create({
-    doc: (content ? beeMarkdownParser.parse(content)
+    doc: ((typeof content === 'string') ? beeMarkdownParser.parse(content)
       : DOMParser.fromSchema(beeSchema).parse(document.querySelector("#content"))
     ),
     plugins: exampleSetup({ schema: beeSchema })
@@ -65,10 +65,11 @@ window.BeeMirror = function (attrs) {
 
   this.focus = function(){}
   this.getMDContent = function(){
-    view.editor.state
-    return beeMarkdownSerializer.serialize(view.editor.state.doc);
+    return markdownCommandSpec.getMDContent();
   }
-
+  this.lastAddedAt = function(){
+    return !!view.editor.state.history$.prevTime
+  }
 }
 
 window.markdownit = markdownit('default', {}, beeTokens).use(videoMarkdown)
