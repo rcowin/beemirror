@@ -76,6 +76,29 @@ function insertTableItem(tableType) {
   })
 }
 
+
+
+function insertVideo(nodeType) {
+  return new MenuItem({
+    title: "Insert youtube video",
+    label: "Youtube",
+    select(state) { return canInsert(state, nodeType) },
+    run(state, _, view) {
+      let {node, from, to} = state.selection, attrs = nodeType && node && node.type == nodeType && node.attrs
+      openPrompt({
+        title: "Insert youtube video",
+        fields: {
+          videoID: new TextField({label: "Vido id", required: true})//, value: attrs && attrs.src}),
+        },
+        callback(attrs) {
+          view.dispatch(view.state.tr.replaceSelectionWith(nodeType.createAndFill({...attrs,...{service:'youtube'}})))
+          view.focus()
+        }
+      })
+    }
+  })
+}
+
 function cmdItem(cmd, options) {
   let passedOptions = {
     label: options.title,
@@ -265,8 +288,13 @@ function buildMenuItems(schema) {
     r.removeColumn = cmdItem(removeColumn, {title: "Remove column"})
   }
 
+  if (type = schema.nodes.video){
+    r.insertVideo = insertVideo(type)
+  }
+
+
   let cut = arr => arr.filter(x => x)
-  r.insertMenu = new Dropdown(cut([r.insertImage, r.insertHorizontalRule, r.insertTable]), {label: "Insert"})
+  r.insertMenu = new Dropdown(cut([r.insertImage, r.insertHorizontalRule, r.insertTable, r.insertVideo]), {label: "Insert"})
   r.typeMenu = new Dropdown(cut([r.makeParagraph, r.makeCodeBlock, r.makeHead1 && new DropdownSubmenu(cut([
     r.makeHead1, r.makeHead2, r.makeHead3, r.makeHead4, r.makeHead5, r.makeHead6
   ]), {label: "Heading"})]), {label: "Type..."})

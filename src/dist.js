@@ -19,30 +19,32 @@ import { MenuBarEditorView, MenuItem } from 'prosemirror-menu'
 import { buildMarkdownCommandSpec } from './edit/commands'
 
 
+let nodes = schema.nodeSpec;
+
+nodes = addTableNodes(nodes, "text<_>*", "block");
+nodes = addListNodes(nodes, "paragraph block*", "block");
+nodes = addVideoNodes(nodes);
+
+const beeSchema = new Schema({
+  nodes: nodes,
+  marks: schema.markSpec
+})
+
+let beeDOMParser = DOMParser.fromSchema(beeSchema);
+
+let markdown = markdownit('default', { html: false }, beeTokens).use(videoMarkdown);
+let beeMarkdownParser = new MarkdownParser(beeSchema, markdown, beeTokens);
+
+let beeMdNodes = { ...defaultMarkdownSerializer.nodes, ...beeSerializerNodes };
+let beeMdMarks = defaultMarkdownSerializer.marks;
+let beeMarkdownSerializer = new MarkdownSerializer(beeMdNodes, beeMdMarks);
+
 window.BeeMirror = function (attrs) {
   let content = attrs.doc;
 
-  let nodes = schema.nodeSpec;
-
-  nodes = addTableNodes(nodes, "text<_>*", "block");
-  nodes = addListNodes(nodes, "paragraph block*", "block");
-  nodes = addVideoNodes(nodes);
-
-  const beeSchema = new Schema({
-    nodes: nodes,
-    marks: schema.markSpec
-  })
-
-  let markdown = markdownit('default', { html: false }, beeTokens).use(videoMarkdown);
-  let beeMarkdownParser = new MarkdownParser(beeSchema, markdown, beeTokens);
-
-  let beeMdNodes = { ...defaultMarkdownSerializer.nodes, ...beeSerializerNodes };
-  let beeMdMarks = defaultMarkdownSerializer.marks;
-  let beeMarkdownSerializer = new MarkdownSerializer(beeMdNodes, beeMdMarks);
-
   let state = EditorState.create({
     doc: ((typeof content === 'string') ? beeMarkdownParser.parse(content)
-      : DOMParser.fromSchema(beeSchema).parse(document.querySelector("#content"))
+      : beeDOMParser.parse(document.querySelector("#content"))
     ),
     plugins: exampleSetup({ schema: beeSchema })
   })
@@ -72,4 +74,8 @@ window.BeeMirror = function (attrs) {
   }
 }
 
+window.unmarkdown = function(dom){
+  let node = beeDOMParser.parse(dom);
+  return beeMarkdownSerializer.serialize(node);
+}
 window.markdownit = markdownit('default', {}, beeTokens).use(videoMarkdown)
