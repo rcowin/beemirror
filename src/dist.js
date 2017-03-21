@@ -3,7 +3,7 @@ import { Schema, DOMParser } from 'prosemirror-model'
 import { EditorState } from 'prosemirror-state'
 import { addListNodes } from 'prosemirror-schema-list'
 import { addTableNodes } from './model/beetable'
-import { addVideoNodes } from './model/video'
+import { addVideoNodes, addVideoMarks } from './model/video'
 
 import {
   schema, MarkdownParser, MarkdownSerializer,
@@ -25,9 +25,12 @@ nodes = addTableNodes(nodes, "text<_>*", "block");
 nodes = addListNodes(nodes, "paragraph block*", "block");
 nodes = addVideoNodes(nodes);
 
+let marks = schema.markSpec;
+marks = addVideoMarks(marks);
+
 const beeSchema = new Schema({
   nodes: nodes,
-  marks: schema.markSpec
+  marks: marks
 })
 
 let beeDOMParser = DOMParser.fromSchema(beeSchema);

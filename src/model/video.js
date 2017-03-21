@@ -6,6 +6,8 @@ const YoutubeImage = RegExp("i.ytimg.com\/(vi|sb|vi_webp)/([a-zA-Z0-9_-]{11})\/"
 const YoutubeEmbed = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
 const YoutubePageUrl = RegExp("youtube.com");
 const YoutubeQuery = RegExp("v=([a-zA-Z0-9_-]{11})");
+const YoutubeLink = RegExp('^\/watch.v=([a-zA-Z0-9_-]{11})');
+
 const videoServices = {
   youtube: {
     parseDOM(dom){
@@ -19,7 +21,7 @@ const videoServices = {
         }
         return false;
       default:
-        let data = src.match(YoutubeImage) || src.match(YoutubeEmbed)
+        data = src.match(YoutubeImage) || src.match(YoutubeEmbed)
         if (!data) return false;
 
         return data[2];
@@ -37,6 +39,16 @@ const videoServices = {
     }
   },
 
+}
+
+const videoMarks = {  
+  parseDOM: [{tag: "a", getAttrs: (dom) => {
+    let data = dom.getAttribute("href").match(YoutubeLink) 
+
+    if (data) return {};
+    else return false;
+  }}],
+  toDOM(node) { return 0; }
 }
 
 
@@ -94,4 +106,10 @@ function addVideoNodes(nodes) {
  })
 }
 
-exports.addVideoNodes = addVideoNodes;
+function addVideoMarks(marks) {
+  return marks.prepend({
+    videoLink: add(videoMarks, { inline: true, group: "inline",})
+ })
+}
+
+export {addVideoNodes, addVideoMarks};
