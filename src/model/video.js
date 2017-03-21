@@ -15,8 +15,8 @@ const videoServices = {
       let data;
       switch (dom.tagName) {
 	    case 'VIDEO':
-        if (document.location.host.match(YoutubePageUrl)) {
-          data = document.location.search.match(YoutubeQuery);
+        if (pagehref.match(YoutubePageUrl)) {
+          data = pagehref.match(YoutubeQuery);
           if (data) return data[1];
         }
         return false;
@@ -112,4 +112,11 @@ function addVideoMarks(marks) {
  })
 }
 
-export {addVideoNodes, addVideoMarks};
+let pagehref = document.location.href;
+
+function setPagehref(href) {
+  pagehref = href;
+}
+
+
+export {addVideoNodes, addVideoMarks, setPagehref};

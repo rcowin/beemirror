@@ -3,7 +3,7 @@ import { Schema, DOMParser } from 'prosemirror-model'
 import { EditorState } from 'prosemirror-state'
 import { addListNodes } from 'prosemirror-schema-list'
 import { addTableNodes } from './model/beetable'
-import { addVideoNodes, addVideoMarks } from './model/video'
+import { addVideoNodes, addVideoMarks, setPagehref } from './model/video'
 
 import {
   schema, MarkdownParser, MarkdownSerializer,
@@ -77,7 +77,8 @@ window.BeeMirror = function (attrs) {
   }
 }
 
-window.unmarkdown = function(dom){
+window.unmarkdown = function(dom, url){
+  setPagehref(url);
   let node = beeDOMParser.parse(dom);
   return beeMarkdownSerializer.serialize(node);
 }
