@@ -6,7 +6,7 @@ const YoutubeImage = RegExp("i.ytimg.com\/(vi|sb|vi_webp)/([a-zA-Z0-9_-]{11})\/"
 const YoutubeEmbed = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
 const YoutubePageUrl = RegExp("youtube.com");
 const YoutubeQuery = RegExp("v=([a-zA-Z0-9_-]{11})");
-const YoutubeLink = RegExp('^\/watch.v=([a-zA-Z0-9_-]{11})');
+const YoutubeLink = RegExp('\/watch.v=([a-zA-Z0-9_-]{11})');
 
 const videoServices = {
   youtube: {
