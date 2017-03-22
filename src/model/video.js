@@ -42,7 +42,7 @@ const videoServices = {
 }
 
 const videoMarks = {  
-  parseDOM: [{tag: "a", getAttrs: (dom) => {
+  parseDOM: [{tag: "a[href]", getAttrs: (dom) => {
     let data = dom.getAttribute("href").match(YoutubeLink) 
 
     if (data) return {};
