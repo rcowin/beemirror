@@ -8,6 +8,16 @@ const YoutubePageUrl = RegExp("youtube.com");
 const YoutubeQuery = RegExp("v=([a-zA-Z0-9_-]{11})");
 const YoutubeLink = RegExp('\/watch.v=([a-zA-Z0-9_-]{11})');
 
+// const Image = RegExp("i.ytimg.com\/(vi|sb|vi_webp)/([a-zA-Z0-9_-]{11})\/")
+const VimeoEmbed = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)(?:$|\/|\?)/;
+const VimeoSimple = /https?:\/\/(?:www\.|player\.)?vimeo.com\/video\/(\d+)(?:$|\/|\?)/;
+const VimeoVideo = /https?:\/\/(?:www\.|player\.)?vimeo.com/;
+
+// https://player.vimeo.com/video/6942731
+const VimeoPageUrl = RegExp("youtube.com");
+// const YoutubeQuery = RegExp("v=([a-zA-Z0-9_-]{11})");
+const VimeoLink = RegExp('\/watch.v=([a-zA-Z0-9_-]{11})');
+
 const videoServices = {
   youtube: {
     parseDOM(dom){
@@ -38,8 +48,43 @@ const videoServices = {
       ];
     }
   },
+  vimeo: {
+    parseDOM(dom){
+      let src = dom.getAttribute("src");
+      let data;
+      switch (dom.tagName) {
+	    case 'VIDEO':
+        data = src.match(VimeoVideo);
+        if (data){
+          data = pagehref.match(VimeoSimple);
+          if (data) return data[1];
+        }
+        return false;
+      case 'IFRAME':
+        data = src.match(VimeoEmbed);
+        if (data && data[3] === 'string') return data[3];
 
-}
+        data = src.match(VimeoSimple);
+        if (data) return data[1];
+        return false;
+      case 'A':
+        data = src.match(VimeoSimple);
+        if (data) return data[1];
+
+        return false;
+
+      default:
+        return false;
+      }
+    },
+    toDOM(videoID){
+      return ['iframe', {'src': `https://player.vimeo.com/video/${videoID}`, 
+                         width: "640", height: "360", rameborder:"0",
+                         webkitallowfullscreen: true, mozallowfullscreen: true, allowfullscreen: true}
+      ];
+    }
+  }
+};
 
 const videoMarks = {  
   parseDOM: [{tag: "a[href]", getAttrs: (dom) => {
@@ -57,7 +102,7 @@ const video = {
     service: {default: ''},
     videoID: {default: ''}
   },
-  parseDOM: [{tag: "img,video", getAttrs: (dom) => {
+  parseDOM: [{tag: "img,video,iframe,a", getAttrs: (dom) => {
     let val = false;
     for (const service of Object.keys(videoServices)){
       val = videoServices[service].parseDOM(dom);

@@ -54,7 +54,7 @@ function renderHeadDelim(state, node){
 
 export const beeSerializerNodes = {
   video(state, node){
-    state.write("\n@[youtube]" + "(" + state.esc(node.attrs.videoID) + ")\n")
+    state.write(`\n@[${node.attrs.service}]` + "(" + state.esc(node.attrs.videoID) + ")\n")
   },
   table(state, node) {
     if (node.childCount > 1){
