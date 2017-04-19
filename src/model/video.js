@@ -13,6 +13,8 @@ const VimeoEmbed = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+
 const VimeoSimple = /https?:\/\/(?:www\.|player\.)?vimeo.com\/video\/(\d+)(?:$|\/|\?)/;
 const VimeoVideo = /https?:\/\/(?:www\.|player\.)?vimeo.com/;
 
+import {loadVimeoThumbnail} from '../markdown-it/vimeo_thumbnail';
+
 // https://player.vimeo.com/video/6942731
 const VimeoPageUrl = RegExp("youtube.com");
 // const YoutubeQuery = RegExp("v=([a-zA-Z0-9_-]{11})");
@@ -78,9 +80,13 @@ const videoServices = {
       }
     },
     toDOM(videoID){
-      return ['iframe', {'src': `https://player.vimeo.com/video/${videoID}`, 
-                         width: "640", height: "360", rameborder:"0",
-                         webkitallowfullscreen: true, mozallowfullscreen: true, allowfullscreen: true}
+      loadVimeoThumbnail(videoID);
+      return ['div', {'class': "video-holder gened", 'data-video-id': videoID}, 
+              ['div', {'class': "placeHolder"},
+                ['img', {src:""}],
+                ['div', {'class': "fa fa-youtube-play vimeo-start"}],
+                ['div', {'class': "fa fa-vimeo-square vimeo-icon"}]
+              ]
       ];
     }
   }

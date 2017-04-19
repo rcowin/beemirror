@@ -1,6 +1,8 @@
 // Process @[youtube](youtubeVideoID)
 // Process @[vimeo](vimeoVideoID)
 
+import {loadVimeoThumbnail} from './vimeo_thumbnail';
+
 var yt_regex = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
 function youtube_parser (url) {
   var match = url.match(yt_regex);
@@ -118,6 +120,17 @@ function tokenize_youtube(videoID) {
   return embedStart + videoID + embedEnd;
 }
 
+
+function tokenize_vimeo(videoID) {
+  // `<iframe src="https://player.vimeo.com/video/${videoID}" style="min-height:200px" width="90%" height="90%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen/>`+
+  const div = '<div class="video-holder" data-video-id="'+videoID+'"><div class="placeHolder"><img class="vimeo_video" frameborder="0" allowfullscreen=""><div class="fa fa-youtube-play vimeo-start"></div><div class="fa fa-vimeo-square vimeo-icon"></div></div></div>'
+  
+  loadVimeoThumbnail(videoID);
+    
+  return div;
+}
+
+
 function tokenize_default(service, videoID, options){
   return videoID === '' ? '' :
     '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" id="' +
@@ -127,6 +140,7 @@ function tokenize_default(service, videoID, options){
       '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>';
 }
 
+
 function tokenize_video(md, options) {
   function tokenize_return(tokens, idx) {
     var videoID = md.utils.escapeHtml(tokens[idx].videoID);
@@ -134,6 +148,8 @@ function tokenize_video(md, options) {
 
     switch(service) {
       case 'youtube': return tokenize_youtube(videoID);
+      case 'vimeo': return tokenize_vimeo(videoID);
+
       default: return tokenize_default(service, videoID, options)
     }
   }
