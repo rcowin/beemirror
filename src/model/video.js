@@ -10,7 +10,7 @@ const YoutubeLink = RegExp('\/watch.v=([a-zA-Z0-9_-]{11})');
 
 // const Image = RegExp("i.ytimg.com\/(vi|sb|vi_webp)/([a-zA-Z0-9_-]{11})\/")
 const VimeoEmbed = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)(?:$|\/|\?)/;
-const VimeoSimple = /https?:\/\/(?:www\.|player\.)?vimeo.com\/video\/(\d+)(?:$|\/|\?)/;
+const VimeoSimple = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(video\/)?(\d+)(?:$|\/|\?)/;
 const VimeoVideo = /https?:\/\/(?:www\.|player\.)?vimeo.com/;
 
 import {loadVimeoThumbnail} from '../markdown-it/vimeo_thumbnail';
@@ -32,11 +32,16 @@ const videoServices = {
           if (data) return data[1];
         }
         return false;
+      // case 'IMG':
       default:
+        if (!src) return false;
+        
         data = src.match(YoutubeImage) || src.match(YoutubeEmbed)
         if (!data) return false;
 
         return data[2];
+      // default:
+      //   return false;
       }
       return false;
     },
@@ -59,7 +64,7 @@ const videoServices = {
         data = src.match(VimeoVideo);
         if (data){
           data = pagehref.match(VimeoSimple);
-          if (data) return data[1];
+          if (data) return data[2];
         }
         return false;
       case 'IFRAME':
@@ -67,11 +72,18 @@ const videoServices = {
         if (data && data[3] === 'string') return data[3];
 
         data = src.match(VimeoSimple);
-        if (data) return data[1];
+        if (data) return data[2];
         return false;
       case 'A':
+        var href = dom.getAttribute("href");
+        if (!href) return false;
+        data = href.match(VimeoSimple);
+        if (data) return data[2];
+
+        return false;
+      case 'IMG':
         data = src.match(VimeoSimple);
-        if (data) return data[1];
+        if (data) return data[2];
 
         return false;
 
@@ -93,9 +105,11 @@ const videoServices = {
 };
 
 const videoMarks = {  
-  parseDOM: [{tag: "a[href]", getAttrs: (dom) => {
-    let data = dom.getAttribute("href").match(YoutubeLink) 
+  parseDOM: [{tag: 'a[href*="watch"]', getAttrs: (dom) => {
+    let href = dom.getAttribute("href");
+    if (!href) return false;
 
+    let data = href.match(YoutubeLink) 
     if (data) return {};
     else return false;
   }}],

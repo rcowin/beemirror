@@ -128,7 +128,7 @@ exports.schema = new Schema({
         href: {},
         title: {default: ""}
       },
-      parseDOM: [{tag: "a[href]", getAttrs(dom) {
+      parseDOM: [{tag: 'a:not([href*="vimeo.com"])', getAttrs(dom) {
         return {href: dom.getAttribute("href"), title: dom.getAttribute("title")}
       }}],
       toDOM(node) { return ["a", node.attrs] }
